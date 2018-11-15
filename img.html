@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>img-compression</title>
+</head>
+<body>
+  <input type="file" id="file" onchange="changeFile()" multiple="multiple">
+  <script>
+    const WIDTH = 400
+    const HEIGHT = 300
+    function changeFile () {
+      let img = document.querySelector('#file').files
+      const keys = Object.keys(img)
+      keys.forEach((val) => {
+        getObjectUrl(img[val])
+      })
+    }
+    function getObjectUrl (file) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file)//转化成base64数据类型
+      reader.onload = function(e) {
+        drawToCanvas(this.result)
+      }
+    }
+    function drawToCanvas (file) {
+      let canvas = document.createElement('canvas')
+      let ctx = canvas.getContext('2d')
+      let img = new Image()
+      img.src = file
+      img.onload = function () {
+        ctx.width = img.width
+        ctx.height = img.height
+        ctx.drawImage(img, 0, 0, 400, 300)
+        document.querySelector('body').append(canvas)
+        console.log(canvas.toDataURL())
+        // document.querySelector('body').append(img)
+      }
+    }
+  </script>
+</body>
+</html>
